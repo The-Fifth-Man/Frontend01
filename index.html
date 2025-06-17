@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考试题库管理系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/mockjs@1.1.0/dist/mock.min.js"></script>
+    <script>
+      console.log('页面加载时初始化Mock')
+      if (window.Mock) {
+        console.log('Mock已加载')
+        window.Mock.mock('/api/test', 'GET', {
+          code: 200,
+          data: { message: 'Mock测试成功' }
+        })
+      } else {
+        console.error('Mock未加载')
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
