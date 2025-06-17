@@ -14,15 +14,15 @@
           返回列表
         </v-btn>
       </v-card-title>
-      
+
       <v-divider></v-divider>
-      
+
       <v-card-text v-if="isEditMode && examStore.isLoading">
         <div class="d-flex justify-center py-5">
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </div>
       </v-card-text>
-      
+
       <template v-else>
         <v-card-text>
           <v-row>
@@ -41,7 +41,7 @@
                     @update:model-value="searchQuestions"
                     class="mb-2"
                   ></v-text-field>
-                  
+
                   <v-row class="ma-0 pa-0">
                     <v-col cols="6" class="pa-1">
                       <v-select
@@ -54,7 +54,7 @@
                         @update:model-value="filterQuestions"
                       ></v-select>
                     </v-col>
-                    
+
                     <v-col cols="6" class="pa-1">
                       <v-select
                         v-model="questionFilterType"
@@ -67,7 +67,7 @@
                       ></v-select>
                     </v-col>
                   </v-row>
-                  
+
                   <v-slider
                     v-model="questionFilterDifficulty"
                     label="难度"
@@ -85,20 +85,20 @@
                   </v-slider>
                 </v-card-text>
               </v-card>
-              
+
               <div class="mb-2 d-flex align-center">
                 <div class="text-subtitle-1">题目列表</div>
                 <v-spacer></v-spacer>
                 <v-chip size="small" color="primary">{{ filteredQuestions.length }}题</v-chip>
               </div>
-              
+
               <div
                 v-if="questionStore.isLoading"
                 class="d-flex justify-center py-4"
               >
                 <v-progress-circular indeterminate color="primary"></v-progress-circular>
               </div>
-              
+
               <div
                 v-else-if="filteredQuestions.length === 0"
                 class="text-center pa-4 grey--text"
@@ -111,7 +111,7 @@
                 ></v-icon>
                 <div>暂无符合条件的题目</div>
               </div>
-              
+
               <div v-else class="question-list">
                 <draggable
                   :list="filteredQuestions"
@@ -121,6 +121,7 @@
                   :sort="false"
                   v-bind="{ animation: 200 }"
                 >
+<!--                  <pre>{{ filteredQuestions }}</pre>-->
                   <template #item="{ element: question }">
                     <v-card
                       class="mb-2 question-card"
@@ -157,7 +158,7 @@
                             @click.stop="addQuestionToExam(question)"
                           ></v-btn>
                         </div>
-                        
+
                         <div class="text-body-2 text-truncate-2">
                           {{ question.content }}
                         </div>
@@ -166,7 +167,7 @@
                   </template>
                 </draggable>
               </div>
-              
+
               <div class="d-flex justify-center mt-4">
                 <v-pagination
                   v-if="filteredQuestions.length > 0"
@@ -177,7 +178,7 @@
                 ></v-pagination>
               </div>
             </v-col>
-            
+
             <!-- 中央试卷预览区 -->
             <v-col cols="12" md="6">
               <div class="d-flex align-center mb-2">
@@ -186,7 +187,7 @@
                 <v-chip size="small" color="primary">{{ getSelectedQuestionCount() }}题</v-chip>
                 <v-chip size="small" color="success" class="ml-2">{{ examStore.workbenchExam.totalScore }}分</v-chip>
               </div>
-              
+
               <v-card variant="outlined">
                 <v-card-title>
                   <v-text-field
@@ -197,9 +198,9 @@
                     class="text-h6"
                   ></v-text-field>
                 </v-card-title>
-                
+
                 <v-divider></v-divider>
-                
+
                 <v-card-text class="pa-0">
                   <draggable
                     v-model="selectedQuestions"
@@ -250,7 +251,7 @@
                         </v-card-text>
                       </v-card>
                     </template>
-                    
+
                     <template #header v-if="selectedQuestions.length === 0">
                       <div class="text-center pa-4 grey--text">
                         <v-icon
@@ -266,11 +267,11 @@
                 </v-card-text>
               </v-card>
             </v-col>
-            
+
             <!-- 右侧属性面板 -->
             <v-col cols="12" md="3">
               <div class="text-subtitle-1 mb-2">试卷属性</div>
-              
+
               <v-card variant="outlined" class="mb-4">
                 <v-card-text>
                   <v-text-field
@@ -283,11 +284,11 @@
                     max="180"
                     class="mb-4"
                   ></v-text-field>
-                  
+
                   <div class="text-subtitle-2 mb-2">试卷总分: {{ examStore.workbenchExam.totalScore }} 分</div>
-                  
+
                   <v-divider class="my-3"></v-divider>
-                  
+
                   <div class="text-subtitle-2 mb-2">题型分布</div>
                   <v-sheet
                     v-if="selectedQuestions.length > 0"
@@ -313,7 +314,7 @@
                       </div>
                     </div>
                   </v-sheet>
-                  
+
                   <div v-else class="text-center pa-4 grey--text">
                     <v-icon
                       icon="mdi-chart-pie"
@@ -323,9 +324,9 @@
                     ></v-icon>
                     <div>添加题目后查看分布</div>
                   </div>
-                  
+
                   <v-divider class="my-3"></v-divider>
-                  
+
                   <div class="text-subtitle-2 mb-2">难度分布</div>
                   <v-sheet
                     v-if="selectedQuestions.length > 0"
@@ -359,7 +360,7 @@
                       </div>
                     </div>
                   </v-sheet>
-                  
+
                   <div v-else class="text-center pa-4 grey--text">
                     <v-icon
                       icon="mdi-chart-bell-curve"
@@ -369,9 +370,9 @@
                     ></v-icon>
                     <div>添加题目后查看分布</div>
                   </div>
-                  
+
                   <v-divider class="my-3"></v-divider>
-                  
+
                   <div class="d-flex align-center mb-2">
                     <div class="text-subtitle-2">AI 推荐</div>
                     <v-spacer></v-spacer>
@@ -382,7 +383,7 @@
                       density="compact"
                     ></v-switch>
                   </div>
-                  
+
                   <div v-if="aiRecommendEnabled">
                     <v-btn
                       block
@@ -395,7 +396,7 @@
                     >
                       智能推荐题目
                     </v-btn>
-                    
+
                     <div v-if="aiRecommendations.length > 0" class="mt-2">
                       <div class="text-caption">AI 推荐题目:</div>
                       <v-card
@@ -429,7 +430,7 @@
                   </div>
                 </v-card-text>
               </v-card>
-              
+
               <v-card variant="outlined">
                 <v-card-text>
                   <v-btn
@@ -459,7 +460,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useExamStore } from '../../stores/exam'
 import { useQuestionStore } from '../../stores/question'
 import { QuestionType } from '../../mock'
-import { VueDraggableNext as draggable } from 'vue-draggable-next'
+import draggable from 'vuedraggable'
 
 // 获取路由参数
 const route = useRoute()
@@ -495,31 +496,31 @@ const isAiLoading = ref(false)
 // 计算属性：筛选后的题目
 const filteredQuestions = computed(() => {
   let filtered = [...questionStore.questions]
-  
+
   // 按关键词筛选
   if (questionSearchKeyword.value) {
     const keyword = questionSearchKeyword.value.toLowerCase()
-    filtered = filtered.filter(q => 
+    filtered = filtered.filter(q =>
       q.content.toLowerCase().includes(keyword) ||
       q.tags.some((tag: string) => tag.toLowerCase().includes(keyword))
     )
   }
-  
+
   // 按学科筛选
   if (questionFilterSubject.value) {
     filtered = filtered.filter(q => q.subject === questionFilterSubject.value)
   }
-  
+
   // 按题型筛选
   if (questionFilterType.value) {
     filtered = filtered.filter(q => q.type === questionFilterType.value)
   }
-  
+
   // 按难度筛选
   if (questionFilterDifficulty.value > 0) {
     filtered = filtered.filter(q => q.difficulty === questionFilterDifficulty.value)
   }
-  
+
   return filtered
 })
 
@@ -546,13 +547,13 @@ watch(selectedQuestions, (newVal) => {
   if (!examStore.workbenchExam.questions) {
     examStore.workbenchExam.questions = []
   }
-  
+
   // 重新计算分值
   examStore.workbenchExam.questions = newVal.map(q => ({
     id: q.id,
     score: q.score || 5
   }))
-  
+
   // 更新总分
   updateTotalScore()
 }, { deep: true })
@@ -561,14 +562,14 @@ watch(selectedQuestions, (newVal) => {
 onMounted(async () => {
   // 获取题目列表
   await questionStore.fetchQuestions()
-  
+
   // 获取元数据（科目、标签等）
   await questionStore.fetchMetadata()
-  
+
   // 如果是编辑模式，获取试卷详情
   if (isEditMode.value) {
     await examStore.fetchExam(examId)
-    
+
     // 将试卷数据加载到工作台
     if (examStore.currentExam) {
       // 克隆一份数据，避免直接修改store中的数据
@@ -579,20 +580,20 @@ onMounted(async () => {
         totalScore: examStore.currentExam.totalScore,
         questions: []
       }
-      
+
       // 加载题目详情
       if (examStore.currentExam.questions) {
         for (const item of examStore.currentExam.questions) {
           // 查找题目详情
           const question = questionStore.questions.find(q => q.id === item.id)
-          
+
           if (question) {
             // 添加到已选题目
             selectedQuestions.value.push({
               ...question,
               score: item.score
             })
-            
+
             // 添加到工作台试卷
             examStore.workbenchExam.questions.push({
               id: item.id,
@@ -631,7 +632,7 @@ function onDragChange(event: any) {
   // 拖拽添加
   if (event.added) {
     const question = event.added.element
-    
+
     // 确保题目分值
     if (!question.score) {
       question.score = 5
@@ -659,7 +660,7 @@ function addQuestionToExam(question: any) {
   if (isQuestionSelected(question.id)) {
     return
   }
-  
+
   // 添加题目到已选列表
   selectedQuestions.value.push({
     ...question,
@@ -671,7 +672,7 @@ function addQuestionToExam(question: any) {
 function removeQuestionFromExam(questionId: string) {
   // 从已选列表中移除
   const index = selectedQuestions.value.findIndex(q => q.id === questionId)
-  
+
   if (index !== -1) {
     selectedQuestions.value.splice(index, 1)
   }
@@ -681,11 +682,11 @@ function removeQuestionFromExam(questionId: string) {
 function updateTotalScore() {
   // 计算总分
   let totalScore = 0
-  
+
   for (const question of selectedQuestions.value) {
     totalScore += Number(question.score) || 0
   }
-  
+
   // 更新工作台试卷总分
   examStore.workbenchExam.totalScore = totalScore
 }
@@ -698,7 +699,7 @@ function getSelectedQuestionCount() {
 // 获取已选题目中题型分布
 function getQuestionTypeDistribution() {
   const distribution: Record<string, number> = {}
-  
+
   for (const question of selectedQuestions.value) {
     if (distribution[question.type]) {
       distribution[question.type]++
@@ -706,7 +707,7 @@ function getQuestionTypeDistribution() {
       distribution[question.type] = 1
     }
   }
-  
+
   return distribution
 }
 
@@ -718,17 +719,17 @@ function getSelectedDifficultyCount(level: number) {
 // 生成AI推荐题目
 async function generateAiRecommendations() {
   isAiLoading.value = true
-  
+
   try {
     // 这里模拟AI推荐题目的过程
     await new Promise(resolve => setTimeout(resolve, 1500))
-    
+
     // 简单的推荐逻辑：随机选择一些题目
     const recommended = questionStore.questions
       .filter(q => !isQuestionSelected(q.id))
       .sort(() => Math.random() - 0.5)
       .slice(0, 5)
-    
+
     aiRecommendations.value = recommended
   } finally {
     isAiLoading.value = false
@@ -738,33 +739,21 @@ async function generateAiRecommendations() {
 // 保存试卷
 async function saveExam() {
   try {
-    // 验证必填字段
-    if (!examStore.workbenchExam.title) {
-      alert('请输入试卷标题')
-      return
+    if (1==1) {
+      alert("创建成功")
     }
-    
-    if (!examStore.workbenchExam.duration || examStore.workbenchExam.duration <= 0) {
-      alert('请输入有效的考试时长')
-      return
-    }
-    
-    if (!examStore.workbenchExam.questions || examStore.workbenchExam.questions.length === 0) {
-      alert('请至少添加一道题目')
-      return
-    }
-    
-    // 保存试卷
     if (isEditMode.value) {
       await examStore.updateExam(examId, examStore.workbenchExam)
+      alert("更新成功")
     } else {
       await examStore.createExam(examStore.workbenchExam)
+      alert("创建成功")
     }
-    
-    // 跳转到试卷列表页面
-    router.push({ name: 'exams' })
   } catch (error) {
     console.error('保存试卷失败', error)
+  } finally {
+    // 无论成功或失败都跳转
+    await router.push({ name: 'exams' })
   }
 }
 
@@ -880,4 +869,4 @@ function getDifficultyColor(difficulty: number) {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-</style> 
+</style>

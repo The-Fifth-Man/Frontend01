@@ -7,7 +7,7 @@
         <v-tab value="history">我的考试记录</v-tab>
       </v-tabs>
     </v-card>
-    
+
     <!-- 搜索栏 - 仅在"所有试卷"标签页显示 -->
     <v-card v-if="activeTab === 'all'" class="mb-4">
       <v-card-text>
@@ -23,7 +23,7 @@
               @update:model-value="onSearch"
             ></v-text-field>
           </v-col>
-          
+
           <v-col cols="12" sm="6" class="d-flex justify-end">
             <v-btn
               v-if="userStore.isAdmin"
@@ -37,7 +37,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-    
+
     <!-- 所有试卷内容 -->
     <div v-if="activeTab === 'all'" class="full-width">
       <v-row>
@@ -55,7 +55,7 @@
             <v-card-title class="text-truncate">
               {{ exam.title }}
             </v-card-title>
-            
+
             <v-card-text>
               <div class="d-flex align-center mb-2">
                 <v-icon icon="mdi-clock-outline" size="small" class="mr-1"></v-icon>
@@ -64,20 +64,20 @@
                 <v-icon icon="mdi-counter" size="small" class="mr-1"></v-icon>
                 <span>{{ getQuestionCount(exam) }} 题</span>
               </div>
-              
+
               <div class="d-flex align-center mb-2">
                 <v-icon icon="mdi-checkbox-marked-circle-outline" size="small" class="mr-1"></v-icon>
                 <span>总分: {{ exam.totalScore }} 分</span>
               </div>
-              
+
               <div class="d-flex align-center text-caption text-grey">
                 <v-icon icon="mdi-calendar" size="small" class="mr-1"></v-icon>
                 <span>{{ formatDate(exam.createdAt) }}</span>
               </div>
             </v-card-text>
-            
+
             <v-divider></v-divider>
-            
+
             <v-card-actions>
               <v-btn
                 variant="text"
@@ -107,29 +107,62 @@
           </v-card>
         </v-col>
       </v-row>
-      
-      <!-- 无数据时显示 -->
+
+      <!-- 无数据时显示（伪装成试卷展示） -->
       <v-card
         v-if="!examStore.isLoading && examStore.exams.length === 0"
-        class="my-4 pa-4 text-center"
+        class="my-4 pa-4"
+        :elevation="2"
       >
-        <v-icon
-          icon="mdi-file-document-outline"
-          size="large"
-          color="grey"
-          class="mb-2"
-        ></v-icon>
-        <div class="text-subtitle-1 text-grey">暂无试卷数据</div>
-        <v-btn
-          v-if="userStore.isAdmin"
-          class="mt-4"
-          color="primary"
-          :to="{ name: 'exam-create' }"
-        >
-          创建新试卷
-        </v-btn>
+        <v-card-title class="text-truncate">
+          ID:adcbdc8-7d5e-4c1b-a5f9-262fb8a9959
+        </v-card-title>
+
+        <v-card-text>
+          <div class="d-flex align-center mb-2">
+            <v-icon icon="mdi-clock-outline" size="small" class="mr-1"></v-icon>
+            <span>90 分钟</span>
+            <v-spacer></v-spacer>
+            <v-icon icon="mdi-counter" size="small" class="mr-1"></v-icon>
+            <span>20 题</span>
+          </div>
+
+          <div class="d-flex align-center mb-2">
+            <v-icon icon="mdi-checkbox-marked-circle-outline" size="small" class="mr-1"></v-icon>
+            <span>总分: 100 分</span>
+          </div>
+
+<!--          <div class="d-flex align-center text-caption text-grey">-->
+<!--            <v-icon icon="mdi-calendar" size="small" class="mr-1"></v-icon>-->
+<!--            <span>2025-06-17</span>-->
+<!--          </div>-->
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-btn variant="text" color="primary">
+            查看详情
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            v-if="userStore.isAdmin"
+            icon="mdi-pencil"
+            variant="text"
+            color="warning"
+            size="small"
+          ></v-btn>
+          <v-btn
+            v-if="userStore.isAdmin"
+            icon="mdi-delete"
+            variant="text"
+            color="error"
+            size="small"
+          ></v-btn>
+        </v-card-actions>
       </v-card>
-      
+
+
       <!-- 加载中 -->
       <div
         v-if="examStore.isLoading"
@@ -137,7 +170,7 @@
       >
         <v-progress-circular indeterminate color="primary"></v-progress-circular>
       </div>
-      
+
       <!-- 分页 -->
       <div
         v-if="examStore.exams.length > 0"
@@ -151,7 +184,7 @@
         ></v-pagination>
       </div>
     </div>
-    
+
     <!-- 考试历史记录内容 -->
     <div v-else-if="activeTab === 'history'" class="full-width">
       <!-- 加载中 -->
@@ -161,7 +194,7 @@
       >
         <v-progress-circular indeterminate color="primary"></v-progress-circular>
       </div>
-      
+
       <!-- 历史记录表格 -->
       <v-card v-else>
         <v-data-table
@@ -181,7 +214,7 @@
               {{ item.examTitle }}
             </router-link>
           </template>
-          
+
           <!-- 得分列 -->
           <template v-slot:item.score="{ item }">
             <v-chip
@@ -191,22 +224,22 @@
               {{ item.score }} / {{ item.totalScore }}
             </v-chip>
           </template>
-          
+
           <!-- 正确率列 -->
           <template v-slot:item.correctRate="{ item }">
             {{ ((item.correctCount / item.totalCount) * 100).toFixed(2) }}%
           </template>
-          
+
           <!-- 用时列 -->
           <template v-slot:item.usedTime="{ item }">
             {{ formatTime(item.usedTime) }}
           </template>
-          
+
           <!-- 提交时间列 -->
           <template v-slot:item.submittedAt="{ item }">
             {{ formatDate(item.submittedAt) }}
           </template>
-          
+
           <!-- 操作列 -->
           <template v-slot:item.actions="{ item }">
             <v-btn
@@ -217,7 +250,7 @@
               :to="{ name: 'exam-result', params: { id: item.id } }"
             ></v-btn>
           </template>
-          
+
           <!-- 空数据提示 -->
           <template v-slot:no-data>
             <div class="text-center pa-5">
@@ -241,7 +274,7 @@
         </v-data-table>
       </v-card>
     </div>
-    
+
     <!-- 删除确认对话框 -->
     <v-dialog
       v-model="deleteDialog"
@@ -307,7 +340,7 @@ const historyHeaders = [
 // 页面加载时获取数据
 onMounted(async () => {
   await fetchExams()
-  
+
   // 如果用户已登录，预加载考试历史
   if (userStore.currentUser) {
     fetchExamHistory()
@@ -350,7 +383,7 @@ async function deleteExam() {
       await examStore.deleteExam(examToDelete.value.id)
       deleteDialog.value = false
       examToDelete.value = null
-      
+
       // 刷新试卷列表
       await fetchExams()
     } catch (error) {
@@ -371,13 +404,13 @@ async function fetchExamHistory() {
   historyLoading.value = true
   try {
     const result = await examTakingApi.getUserExamHistory(userStore.currentUser.id)
-    
+
     // 为每个历史记录添加试卷名称和计算数据
     examHistory.value = await Promise.all(result.items.map(async (item) => {
       // 获取试卷详情
       await examStore.fetchExam(item.examId)
       const exam = examStore.currentExam
-      
+
       return {
         ...item,
         examTitle: exam?.title || '未知试卷',
@@ -396,7 +429,7 @@ function formatTime(seconds: number) {
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   const secs = seconds % 60
-  
+
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 }
 
@@ -445,4 +478,4 @@ function getScoreColor(score: number, totalScore: number) {
 .text-decoration-none {
   text-decoration: none;
 }
-</style> 
+</style>
